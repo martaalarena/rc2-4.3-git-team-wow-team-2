@@ -15,33 +15,27 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 @RestController
 @RequestMapping("/api/v1/toys")
 public class ToyController {
-<<<<<<< HEAD
 
-    // COMPLETE THIS
-=======
     @GetMapping("/{id}")
     public ResponseEntity<ToyResponse> getToyById(@PathVariable Long id) {
         Optional<Toy> toyOptional = toyRepository.findById(id);
-        if(toyOptional.isPresent()) {
+        if (toyOptional.isPresent()) {
             Toy toy = toyOptional.get();
             ToyResponse toyResponse = mapToToyResponse(toy);
             return ResponseEntity.ok(toyResponse);
         }
         return ResponseEntity.notFound().build();
     }
-    
->>>>>>> c5b5103fd68a325bf992fa9683f40ba982d65de6
-}
 
+    @PostMapping
+    public ResponseEntity<ToyResponse> createToy(@RequestBody ToyRequest toyRequest) {
+        Toy toy = new Toy(toyRequest.getName(), toyRequest.getBrand(), toyRequest.getPrice());
+        toyRepository.save(toy);
+        ToyResponse toyResponse = mapToToyResponse(toy);
+        return ResponseEntity.status(HttpStatus.CREATED).body(toyResponse);
+    }
 
-@PostMapping
-public ResponseEntity<ToyResponse> createToy(@RequestBody ToyRequest toyRequest) {
-    Toy toy = new Toy(toyRequest.getName(), toyRequest.getBrand(), toyRequest.getPrice());
-    toyRepository.save(toy);
-    ToyResponse toyResponse = mapToToyResponse(toy);
-    return ResponseEntity.status(HttpStatus.CREATED).body(toyResponse);
 }
