@@ -9,15 +9,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import net.toyland.store.persistence.toys.Toy;
 
+
 import net.toyland.store.persistence.toys.ToyRepository;
 
 import java.util.Optional;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.web.bind.annotation.GetMapping;
+
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @RestController
 @RequestMapping("/api/v1/toys")
@@ -25,9 +30,19 @@ public class ToyController {
 
     private final ToyRepository toyRepository;
 
+
     public ToyController(@Autowired ToyRepository toyRepository) {
         this.toyRepository = toyRepository;
 
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ToyResponse>> getAllToys() {
+        List<Toy> toys = toyRepository.findAll();
+        List<ToyResponse> toyResponses = toys.stream()
+                .map(this::mapToToyResponse)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(toyResponses);
     }
 
     @GetMapping("/{id}")
