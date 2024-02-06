@@ -55,5 +55,10 @@ public class Toy {
         this.price = price;
     }
 
+    public BigDecimal getStock() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getStock'");
+    }
+
     
 }
